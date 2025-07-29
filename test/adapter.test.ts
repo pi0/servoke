@@ -4,7 +4,7 @@ import * as fixtures from "./fixtures/index.ts";
 
 const cases = {
   node: fixtures.nodeHandler,
-  // express: fixtures.express,
+  express: fixtures.express,
   "node-default": { default: fixtures.nodeHandler },
   web: fixtures.webHandler,
   "web-default": { default: fixtures.webHandler },
@@ -16,7 +16,7 @@ describe("adapter", () => {
   describe("toWebHandler", () => {
     for (const [name, mod] of Object.entries(cases)) {
       it(`should convert ${name} to a Web handler`, async () => {
-        const webHandler = toWebHandler(mod, { debug: true });
+        const webHandler = toWebHandler(mod);
         expect(webHandler).toBeInstanceOf(Function);
         expect(webHandler.length).toBe(1);
 

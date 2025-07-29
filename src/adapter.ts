@@ -1,11 +1,10 @@
-import { toReqRes, toFetchResponse } from "fetch-to-node";
-
 import type {
   EntryModule,
   Fetchable,
   NodeHandler,
   WebHandler,
 } from "./types.ts";
+import { Server } from "node:http";
 
 const ERR_NO_COMPATIBLE_HANDLER =
   "Module does not exports any compatible handler!";
@@ -15,10 +14,7 @@ const ERR_NO_COMPATIBLE_HANDLER =
  *
  * Throws an error if no compatible handler is found.
  */
-export function toWebHandler(
-  mod: EntryModule,
-  opts?: { debug?: boolean },
-): WebHandler {
+export function toWebHandler(mod: EntryModule): WebHandler {
   if (!mod) {
     throw new Error(ERR_NO_COMPATIBLE_HANDLER);
   }
@@ -47,31 +43,33 @@ export function toWebHandler(
   // (nodeReq, nodeRes) => {}
   return fn.length === 1
     ? (fn as WebHandler)
-    : nodeToWebHandler(fn as NodeHandler, opts);
+    : nodeToWebHandler(fn as NodeHandler);
 }
 
 /**
  * Convert a Node handler (`(req, res) => {...}`) to a fetch-compatible Web handler (`(Request) => Promise<Response>`).
  */
-export function nodeToWebHandler(
-  nodeHandler: NodeHandler,
-  opts?: { debug?: boolean },
-): WebHandler {
+export function nodeToWebHandler(nodeHandler: NodeHandler): WebHandler {
+  /**
+   * We could use emulation via https://npmjs.com/fetch-to-node or https://npmjs.com/node-mock-http
+   * But they often come with edge cases and limitations for example express overrides req/res prototype
+   * Since main usage of this library is one-off invocations, cost of temporary server creation is negligible.
+   */
   return async (webReq) => {
+    const server = new Server(nodeHandler);
+    await new Promise<void>((resolve) => {
+      server.listen(0, "localhost", resolve);
+    });
+    const { port } = server.address() as { port: number };
+    const originalUrl = new URL(webReq.url);
+    const url = new URL(
+      originalUrl.pathname + originalUrl.search,
+      `http://localhost:${port}`,
+    );
     try {
-      // https://github.com/mhart/fetch-to-node
-      const { req: nodeReq, res: nodeRes } = toReqRes(webReq);
-      await nodeHandler(nodeReq, nodeRes);
-      const webResponse = await toFetchResponse(nodeRes);
-      return webResponse;
-    } catch (error) {
-      if (opts?.debug) {
-        console.error(error);
-      }
-      return new Response("Internal Server Error", {
-        status: 500,
-        statusText: "Internal Server Error",
-      });
+      return await fetch(url, webReq);
+    } finally {
+      server.close();
     }
   };
 }

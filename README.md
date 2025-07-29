@@ -17,10 +17,10 @@ Locally invoke any server handler.
 
 ✅ Loader with auto spy to support server entries that are directly listening server.
 
+✅ Zero dependencies.
+
 > [!IMPORTANT]
 > This is an experimental idea!
->
-> Express.js is currently incompatible with the Node adapter.
 
 ## Usage
 
@@ -64,15 +64,15 @@ You can then directly call the loaded web handler (`Request => Promise<Response>
 <!-- automd:file code src="./examples/_node-server.mjs" -->
 
 ```mjs [_node-server.mjs]
-import { Server } from "node:http";
+import Express from "express";
 
-const server = new Server((req, res) => {
-  res.setHeader("Content-Type", "text/plain");
-  res.end(JSON.stringify({ url: req.url }));
+const app = Express().use("/", (req, res) => {
+  res.json({ url: req.url });
 });
 
 const PORT = process.env.PORT || 3000;
-server.listen(PORT, () => {
+
+app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
 ```
@@ -99,11 +99,11 @@ console.log(await res.json()); // { url: '/test' }
 
 <!-- automd:jsdocs src="./src/adapter.ts" -->
 
-### `nodeToWebHandler(nodeHandler, opts?: { debug? })`
+### `nodeToWebHandler(nodeHandler)`
 
 Convert a Node handler (`(req, res) => {...}`) to a fetch-compatible Web handler (`(Request) => Promise<Response>`).
 
-### `toWebHandler(mod, opts?: { debug? })`
+### `toWebHandler(mod)`
 
 Automatically convert imported module with unknown exports (Node.js or Web syntax) to a fetch-compatible Web handler (`(Request) => Promise<Response>`).
 

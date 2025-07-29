@@ -23,9 +23,6 @@
     "test": "pnpm lint && pnpm test:types && vitest run --coverage",
     "test:types": "tsc --noEmit --skipLibCheck"
   },
-  "dependencies": {
-    "fetch-to-node": "^2.1.0"
-  },
   "devDependencies": {
     "@types/express": "^5.0.3",
     "@types/node": "^24.1.0",

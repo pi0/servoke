@@ -19,7 +19,8 @@ export async function invokeWebHandler(
   try {
     const res = await handler(request);
     return res;
-  } catch {
+  } catch (error) {
+    console.error(error);
     return new Response("Internal Server Error", {
       status: 500,
       statusText: "Internal Server Error",
