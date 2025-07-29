@@ -11,20 +11,21 @@ Locally invoke any server handler.
 
 ✅ Support Web and Node.js compatible handlers.
 
-✅ Does not requires listening server.
+✅ Does not require a listening server.
 
 ✅ Auto detects module based on export signature.
 
-> ![WARNING]
+< [!IMPORTANT]
 > This is an experimental idea!
-> Express is notably incompatible currently with node adapter.
+> 
+> Express.js is currently incompatible with the Node adapter.
 
 ## Usage
 
 Install the package:
 
 ```sh
-# ✨ Auto-detect (supports npm, yarn, pnpm, deno and bun)
+# ✨ Auto-detect (supports npm, yarn, pnpm, deno, and bun)
 npx nypm install servoke
 ```
 
@@ -95,7 +96,7 @@ Throws an error if no compatible handler is found.
 <summary>local development</summary>
 
 - Clone this repository
-- Install latest LTS version of [Node.js](https://nodejs.org/en/)
+- Install the latest LTS version of [Node.js](https://nodejs.org/en/)
 - Enable [Corepack](https://github.com/nodejs/corepack) using `corepack enable`
 - Install dependencies using `pnpm install`
 - Run interactive tests using `pnpm dev`
