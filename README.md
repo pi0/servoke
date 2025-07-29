@@ -76,11 +76,11 @@ console.log(await res.json()); // { url: '/test' }
 
 <!-- automd:jsdocs src="./src/adapter.ts" -->
 
-### `nodeToWebHandler(nodeHandler)`
+### `nodeToWebHandler(nodeHandler, opts?: { debug? })`
 
 Convert a Node handler (`(req, res) => {...}`) to a fetch-compatible Web handler (`(Request) => Promise<Response>`).
 
-### `toWebHandler(mod)`
+### `toWebHandler(mod, opts?: { debug? })`
 
 Automatically convert imported module with unknown exports (Node.js or Web syntax) to a fetch-compatible Web handler (`(Request) => Promise<Response>`).
 
