@@ -1,5 +1,23 @@
 # Changelog
 
+## v0.0.2
+
+[compare changes](https://github.com/pi0/servoke/compare/v0.0.1...v0.0.2)
+
+### 🚀 Enhancements
+
+- Use node listener for better compatibility ([85b5738](https://github.com/pi0/servoke/commit/85b5738))
+
+### 🏡 Chore
+
+- **release:** V0.0.1 ([516e031](https://github.com/pi0/servoke/commit/516e031))
+- Apply automated updates ([f227787](https://github.com/pi0/servoke/commit/f227787))
+- Apply automated updates ([d5871e3](https://github.com/pi0/servoke/commit/d5871e3))
+
+### ❤️ Contributors
+
+- Pooya Parsa ([@pi0](https://github.com/pi0))
+
 ## v0.0.1
 
 ### 🚀 Enhancements
