@@ -15,7 +15,7 @@ Locally invoke any server handler.
 
 ✅ Auto detects module based on export signature.
 
-✅ Loader with auto spy on `.listhen` to support entries without export.
+✅ Loader with auto spy to support server entries that are directly listening server.
 
 > [!IMPORTANT]
 > This is an experimental idea!
@@ -55,9 +55,9 @@ import {
 
 - Initiates a spy on `node:http:Server.listen`
 - Loads module using dynamic `import()`
-- If no `listen` call detected, tries to detect module exports using `toWebHandler` (if exports are not fetch-compatible will be converted using `nodeToWebHandler`)
+- If no `listen` call is detected, tries to detect module exports using `toWebHandler` (if exports are not fetch-compatible, will be converted using `nodeToWebHandler`)
 
-You can then directly call loaded web handler (`Request => Promise<Response>`) or use `invokeWebHandler` for more convenience.
+You can then directly call the loaded web handler (`Request => Promise<Response>`) or use `invokeWebHandler` for more convenience.
 
 **Example:**
 
