@@ -14,7 +14,6 @@ describe("loader", () => {
     it("node-server", async () => {
       const handler = await loadAsWebHandler(
         new URL("fixtures/node-server.mjs", import.meta.url),
-        { listenHook: true },
       );
       const res = await invokeWebHandler(handler, "/");
       await expect(res.text()).resolves.toBe("OK!");
