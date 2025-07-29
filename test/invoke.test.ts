@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import * as fixtures from "./fixtures.ts";
+import * as fixtures from "./fixtures/index.ts";
 import { invokeModule } from "../src/invoke.ts";
 
 const cases = {

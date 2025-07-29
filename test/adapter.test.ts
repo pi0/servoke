@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { toWebHandler } from "../src/index.ts";
-import * as fixtures from "./fixtures.ts";
+import * as fixtures from "./fixtures/index.ts";
 
 const cases = {
   node: fixtures.nodeHandler,

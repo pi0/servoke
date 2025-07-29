@@ -15,6 +15,8 @@ Locally invoke any server handler.
 
 ✅ Auto detects module based on export signature.
 
+✅ Loader with auto spy on `.listhen` to support entries without export.
+
 > [!IMPORTANT]
 > This is an experimental idea!
 >
@@ -41,33 +43,53 @@ import {
   nodeToWebHandler,
   invokeWebHandler,
   invokeModule,
+  loadAsWebHandler,
 } from "servoke";
 ```
 
 <!-- /automd -->
 
-### `invokeModule`
+### `loadAsWebHandler`
+
+`loadAsWebHandler` is the main utility from this package. It:
+
+- Initiates a spy on `node:http:Server.listen`
+- Loads module using dynamic `import()`
+- If no `listen` call detected, tries to detect module exports using `toWebHandler` (if exports are not fetch-compatible will be converted using `nodeToWebHandler`)
+
+You can then directly call loaded web handler (`Request => Promise<Response>`) or use `invokeWebHandler` for more convenience.
 
 **Example:**
 
-<!-- automd:file code src="./examples/_node-handler.mjs" -->
+<!-- automd:file code src="./examples/_node-server.mjs" -->
 
-```mjs [_node-handler.mjs]
-export default function nodeHandler(req, res) {
+```mjs [_node-server.mjs]
+import { Server } from "node:http";
+
+const server = new Server((req, res) => {
   res.setHeader("Content-Type", "text/plain");
   res.end(JSON.stringify({ url: req.url }));
-}
+});
+
+const PORT = process.env.PORT || 3000;
+server.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
+});
 ```
 
 <!-- /automd -->
 
-<!-- automd:file code src="./examples/invoke-module.mjs" -->
+<!-- automd:file code src="./examples/load-server.mjs" -->
 
-```mjs [invoke-module.mjs]
-import { invokeModule } from "servoke";
+```mjs [load-server.mjs]
+import { loadAsWebHandler, invokeWebHandler } from "servoke";
 
-const handler = await import("./_node-handler.mjs");
-const res = await invokeModule(handler, "/test");
+const webHandler = await loadAsWebHandler(
+  new URL("_node-server.mjs", import.meta.url),
+);
+
+const res = await invokeWebHandler(webHandler, "/test");
+
 console.log(await res.json()); // { url: '/test' }
 ```
 
