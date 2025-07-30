@@ -13,7 +13,7 @@ export async function loadAsWebHandler(id: URL | string): Promise<WebHandler> {
     const requestListener = listenHook?.getHandler();
     const handler = requestListener
       ? nodeToWebHandler(requestListener)
-      : toWebHandler(listenHook?.getHandler() || mod);
+      : toWebHandler(mod);
     return handler;
   } finally {
     listenHook?.revert();
